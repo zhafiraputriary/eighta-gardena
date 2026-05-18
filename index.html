@@ -1,11 +1,3 @@
-
-Eight-A-Garde.html
-
-Halaman
-1
-/
-1
-100%
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -136,12 +128,6 @@ Halaman
             <div style="height: 70px; margin-top: 12px;"><canvas id="chart-jarak"></canvas></div>
         </div>
         <div class="card">
-            <div class="card-title"><i class="fas fa-water"></i> Ultrasonic 2 - Ember</div>
-            <div class="sensor-val" id="val-jarak-manual" style="color:#0d9488;">--<span class="sensor-unit">cm</span></div>
-            <p style="font-size: 11px;">Level air ember</p>
-            <div style="height: 70px; margin-top: 12px;"><canvas id="chart-jarak-manual"></canvas></div>
-        </div>
-        <div class="card">
             <div class="card-title"><i class="fas fa-thermometer-half"></i> DHT22 - Suhu</div>
             <div class="sensor-val" id="val-suhu" style="color:#ef5350;">--<span class="sensor-unit">°C</span></div>
             <p style="font-size: 11px;">Suhu udara tanaman</p>
@@ -197,7 +183,6 @@ function initCharts() {
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } }}
     });
     S.charts.jarak = new Chart($('chart-jarak'), cfg('#2d8a5d'));
-    S.charts.jarak_manual = new Chart($('chart-jarak-manual'), cfg('#0d9488'));
 }
 
 function pushToChart(key, val) {
@@ -275,17 +260,12 @@ function handleIncoming(txt) {
         $('val-jarak').innerHTML = `${num}<span class="sensor-unit">cm</span>`;
         pushToChart("jarak", num);
     }
-    if (key === "jarak_manual") {
-        $('val-jarak-manual').innerHTML = `${num}<span class="sensor-unit">cm</span>`;
-        pushToChart("jarak_manual", num);
-    }
     if (key === "suhu" || key === "temp") {
         $('val-suhu').innerHTML = `${num}<span class="sensor-unit">°C</span>`;
     }
     if (key === "Relay") {
         updateRelayUI(num === 1);
     }
-    // Hanya ubah mode jika Micro:bit benar-benar mengirim perintah mode (bukan feedback relay)
     if (key === "mode") {
         S.mode = (num === 1) ? 'auto' : 'manual';
         updateModeUI();
@@ -303,7 +283,7 @@ async function sendBLE(key, val) {
     } catch (e) { log("TX Error", "red"); }
 }
 
-// Firebase (sama)
+// Firebase
 async function connectFirebase() {
     const apiKey = $('fb-apiKey').value.trim();
     const databaseURL = $('fb-dbUrl').value.trim();
@@ -321,7 +301,6 @@ async function connectFirebase() {
             const d = snap.val();
             if (!d) return;
             if (d.jarak) $('val-jarak').innerHTML = `${d.jarak.value}<span class="sensor-unit">cm</span>`;
-            if (d.jarak_manual) $('val-jarak-manual').innerHTML = `${d.jarak_manual.value}<span class="sensor-unit">cm</span>`;
             if (d.suhu || d.temp) $('val-suhu').innerHTML = `${(d.suhu || d.temp).value}<span class="sensor-unit">°C</span>`;
             if (d.Relay !== undefined) updateRelayUI(d.Relay.value === 1);
             if (d.mode !== undefined) {
@@ -351,5 +330,3 @@ updateModeUI();
 </script>
 </body>
 </html>
-Menampilkan Eight-A-Garde.html.
-Download
